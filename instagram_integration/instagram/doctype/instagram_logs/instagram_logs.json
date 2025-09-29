@@ -1,0 +1,90 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-09-09 11:32:08.087902",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "receiver",
+  "method",
+  "column_break_zqxsy",
+  "sender",
+  "timestamp",
+  "section_break_gbl1s",
+  "is_error",
+  "body"
+ ],
+ "fields": [
+  {
+   "fieldname": "method",
+   "fieldtype": "Select",
+   "label": "Method",
+   "options": "Sent\nReceived",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_zqxsy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "timestamp",
+   "fieldtype": "Datetime",
+   "label": "Timestamp",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_gbl1s",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_error",
+   "fieldtype": "Check",
+   "label": "Is Error"
+  },
+  {
+   "fieldname": "body",
+   "fieldtype": "Text Editor",
+   "label": "Body",
+   "read_only": 1
+  },
+  {
+   "fieldname": "receiver",
+   "fieldtype": "Data",
+   "label": "Receiver",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sender",
+   "fieldtype": "Data",
+   "label": "Sender",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-09-09 11:33:10.951169",
+ "modified_by": "Administrator",
+ "module": "Instagram",
+ "name": "Instagram Logs",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
