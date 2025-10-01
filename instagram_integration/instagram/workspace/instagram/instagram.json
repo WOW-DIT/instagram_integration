@@ -1,0 +1,37 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"A9bldRv1w2\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Instagram</span>\",\"col\":12}},{\"id\":\"6Xrx7INWv0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Connect to Instagram\",\"col\":12}},{\"id\":\"Q0ZdXJUJY1\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"CabCc7QGUU\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Shortcuts</b></span>\",\"col\":12}}]",
+ "creation": "2025-10-01 16:03:27.989821",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "card",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Instagram",
+ "links": [],
+ "modified": "2025-10-01 16:09:12.759089",
+ "modified_by": "Administrator",
+ "module": "Instagram",
+ "name": "Instagram",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 36.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Connect to Instagram",
+   "type": "URL",
+   "url": "https://connectly.wowdigital.sa/instagram-signup/new"
+  }
+ ],
+ "title": "Instagram"
+}

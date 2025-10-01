@@ -15,7 +15,7 @@ def create_instance(code, now):
 	ig_settings = frappe.get_doc("Instagram Settings", "Instagram Settings")
 	app_id = ig_settings.app_id
 	app_secret = ig_settings.get_password("app_secret")
-	redirect_uri = "https://whatsapp.wowdigital.sa/instagram-redirect/new"
+	redirect_uri = "https://connectly.wowdigital.sa/instagram-redirect/new"
 
 	url = f"https://api.instagram.com/oauth/access_token"
 	body = {
@@ -147,3 +147,29 @@ def get_instance(
 		frappe.db.commit()
 
 	return instance
+
+@frappe.whitelist(methods=["GET"])
+def get_instagram_info(instance_id):
+	ig_settings = frappe.get_doc("Instagram Settings", "Instagram Settings")
+	api_host = ig_settings.api_host
+	api_version = ig_settings.api_version
+
+	instance = frappe.get_doc("Instagram Instance", instance_id)
+	token = instance.get_password("token")
+
+	fields = "user_id,username,name,account_type,profile_picture_url,followers_count,media_count"
+	url = f"https://{api_host}/{api_version}/me?fields={fields}&access_token={token}"
+
+	response = requests.get(url)
+
+	success = response.status_code == 200
+	if success:
+		data = response.json()
+		return {"success": success, "info": data}
+	
+	return {"success": success, "info": data}
+
+
+@frappe.whitelist(methods=["POST"])
+def delete_user_data():
+	pass

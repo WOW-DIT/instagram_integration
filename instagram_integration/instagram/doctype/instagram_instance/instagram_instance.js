@@ -7,21 +7,39 @@ frappe.ui.form.on('Instagram Instance', {
 	// }
 	request_live_token: function(frm) {
 		request_live_token(frm)
+	},
+    refresh_token: function(frm) {
+		refresh_token(frm)
 	}
 });
 
 
 function request_live_token(frm) {
 	frappe.call({
-    method: "instagram_integration.instagram.doctype.instagram_instance.instagram_instance.generate_live_token",
-    args: {
-        instance_id: frm.doc.name,
-        now: frappe.datetime.now_datetime()
-    },
-    callback: function(r) {
-        if (!r.exc) {
-            console.log("New datetime:", r.message);
+        method: "instagram_integration.instagram.doctype.instagram_instance.instagram_instance.generate_live_token",
+        args: {
+            instance_id: frm.doc.name,
+            now: frappe.datetime.now_datetime()
+        },
+        callback: function(r) {
+            if (!r.exc) {
+                console.log("New datetime:", r.message);
+            }
         }
-    }
-});
+    });
+}
+
+function refresh_token(frm) {
+	frappe.call({
+        method: "instagram_integration.instagram.doctype.instagram_instance.instagram_instance.refresh_live_token",
+        args: {
+            instance_id: frm.doc.name,
+            now: frappe.datetime.now_datetime()
+        },
+        callback: function(r) {
+            if (!r.exc) {
+                console.log("New datetime:", r.message);
+            }
+        }
+    });
 }
