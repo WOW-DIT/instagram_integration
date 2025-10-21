@@ -10,8 +10,11 @@ import requests
 class InstagramInstance(Document):
 	pass
 
-@frappe.whitelist(methods=["POST"])
+@frappe.whitelist(allow_guest=True)
 def create_instance(code, now):
+	user = frappe.get_doc("User", frappe.session.user)
+	customer_id = user.customer_id if user.customer_id else "WOW Digital Information Technology"
+	
 	ig_settings = frappe.get_doc("Instagram Settings", "Instagram Settings")
 	app_id = ig_settings.app_id
 	app_secret = ig_settings.get_password("app_secret")
@@ -27,7 +30,9 @@ def create_instance(code, now):
 	}
 
 	response = requests.post(url, data=body)
-	if response.status_code == 200:
+
+	success = response.status_code == 200
+	if success:
 		data = response.json()
 		ig_user_id = data.get("user_id")
 		access_token = data.get("access_token")
@@ -35,12 +40,25 @@ def create_instance(code, now):
 		dt = datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
 		expiry_date = dt + timedelta(hours=1)
 
-		instance = get_instance(ig_user_id, expiry_date, access_token)
+		instance = get_instance(customer_id, ig_user_id, expiry_date, access_token)
+
+		user = frappe.get_doc("User", frappe.session.user)
+		has_role = frappe.db.exists(
+			"Has Role",
+			{"parenttype": "User", "parent": user.name, "role": "Instagram Manager"}
+		)
+		if not has_role:
+			user.append("roles", {"role": "Instagram Manager"})
+			user.save(ignore_permissions=True)
 
 		try:
-			generate_live_token(instance.name, now)
-		except:
-			pass
+			return generate_live_token(instance.name, now)
+			
+		except Exception as e:
+			return {"success": False, "error": str(e)}
+
+	return {"success": False, "error": response.text}
+
 		
 
 
@@ -80,7 +98,7 @@ def generate_live_token(instance_id: str, now: str):
 		instance.save(ignore_permissions=True)
 		frappe.db.commit()
 
-	return {"success": success, "message": response.text}
+	return {"success": success, "message": response.text, "instance_id": instance_id}
 
 
 
@@ -122,53 +140,79 @@ def refresh_live_token(instance_id: str, now: str):
 
 
 def get_instance(
+		customer_id: str,
 		ig_user_id: str=None,
 		expiry_date: datetime=None,
 		token: str=None,
 	):
 	user = frappe.session.user
 
-	ig_instances = frappe.get_list(
+	ig_instances = frappe.get_all(
 		"Instagram Instance",
-		filters={"user": user},
+		filters={"user": user, "customer_id": customer_id},
 		fields=["name", "instagram_user_id"],
+		limit=1,
 	)
 
 	if ig_instances and ig_instances[0].instagram_user_id:
-		instance = frappe.get_list("Instagram Instance", ig_instances[0].name)
+		instance = frappe.get_doc("Instagram Instance", ig_instances[0].name)
 
 	else:
 		instance = frappe.new_doc("Instagram Instance")
-		instance.user = frappe.session.user
+		instance.user = user
+		instance.customer_id = customer_id
 		instance.instagram_user_id = ig_user_id
 		instance.expiry_date = expiry_date
 		instance.token = token
 		instance.insert(ignore_permissions=True)
+
+		create_permission(user, instance.doctype, instance.name)
+		
 		frappe.db.commit()
 
 	return instance
 
-@frappe.whitelist(methods=["GET"])
-def get_instagram_info(instance_id):
-	ig_settings = frappe.get_doc("Instagram Settings", "Instagram Settings")
-	api_host = ig_settings.api_host
-	api_version = ig_settings.api_version
+@frappe.whitelist(methods=["POST"])
+def get_instagram_info(instance_id, sync_profile=False):
+	try:
+		ig_settings = frappe.get_doc("Instagram Settings", "Instagram Settings")
+		api_host = ig_settings.api_host
+		api_version = ig_settings.api_version
 
-	instance = frappe.get_doc("Instagram Instance", instance_id)
-	token = instance.get_password("token")
+		instance = frappe.get_doc("Instagram Instance", instance_id)
+		token = instance.get_password("token")
 
-	fields = "user_id,username,name,account_type,profile_picture_url,followers_count,media_count"
-	url = f"https://{api_host}/{api_version}/me?fields={fields}&access_token={token}"
+		fields = "user_id,username,name,account_type,profile_picture_url,followers_count,media_count"
+		url = f"https://{api_host}/{api_version}/me?fields={fields}&access_token={token}"
 
-	response = requests.get(url)
+		response = requests.get(url)
 
-	success = response.status_code == 200
-	if success:
-		data = response.json()
-		return {"success": success, "info": data}
+		success = response.status_code == 200
+		if success:
+			if sync_profile:
+				info = response.json()
+				instance.username = info.get("username")
+				instance.user_id = info.get("user_id")
+				instance.profile_picture = info.get("profile_picture_url")
+				instance.followers_count = info.get("followers_count")
+				instance.media_count = info.get("media_count")
+				instance.save(ignore_permissions=True)
+
+			return {"success": success, "info": info}
+		
+		return {"success": False, "error": response.text}
 	
-	return {"success": success, "info": data}
+	except Exception as e:
+		return {"success": False, "error": str(e)}
+	
 
+def create_permission(user, doctype, value):
+	if user != "Administrator" and user != "Guest":
+		user_perm = frappe.new_doc("User Permission")
+		user_perm.user = user
+		user_perm.allow = doctype
+		user_perm.for_value = value
+		user_perm.insert(ignore_permissions=True)
 
 @frappe.whitelist(methods=["POST"])
 def delete_user_data():

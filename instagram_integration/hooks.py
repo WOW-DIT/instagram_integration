@@ -127,13 +127,13 @@ app_license = "MIT"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
+scheduler_events = {
 # 	"all": [
 # 		"instagram_integration.tasks.all"
 # 	],
-# 	"daily": [
-# 		"instagram_integration.tasks.daily"
-# 	],
+	"daily": [
+		"instagram_integration.tasks.refresh_instagram_instances"
+	],
 # 	"hourly": [
 # 		"instagram_integration.tasks.hourly"
 # 	],
@@ -143,7 +143,7 @@ app_license = "MIT"
 # 	"monthly": [
 # 		"instagram_integration.tasks.monthly"
 # 	],
-# }
+}
 
 # Testing
 # -------

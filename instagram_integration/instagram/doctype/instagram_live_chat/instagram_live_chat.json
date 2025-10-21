@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-07 11:38:56.202965",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "chat_id",
+  "column_break_qxrd",
+  "instance",
+  "section_break_fqgu",
+  "chat_html"
+ ],
+ "fields": [
+  {
+   "fieldname": "chat_id",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Chat ID",
+   "options": "Ai Chat",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_qxrd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "chat_id.instagram_instance",
+   "fieldname": "instance",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Instance",
+   "options": "Instagram Instance",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_fqgu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "chat_html",
+   "fieldtype": "HTML",
+   "label": "Chat HTML"
+  }
+ ],
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-10-07 15:37:17.808029",
+ "modified_by": "Administrator",
+ "module": "Instagram",
+ "name": "Instagram Live Chat",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

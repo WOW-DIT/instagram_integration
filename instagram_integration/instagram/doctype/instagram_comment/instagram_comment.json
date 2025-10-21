@@ -1,0 +1,122 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-02 15:00:46.851071",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "commento_section",
+  "comment_id",
+  "text",
+  "from_section",
+  "user_id",
+  "username",
+  "section_break_zcgy",
+  "instagram_instance",
+  "media_section",
+  "media_id",
+  "column_break_izcg",
+  "media_type_product"
+ ],
+ "fields": [
+  {
+   "fieldname": "user_id",
+   "fieldtype": "Data",
+   "label": "User ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "media_id",
+   "fieldtype": "Data",
+   "label": "Media ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "from_section",
+   "fieldtype": "Section Break",
+   "label": "From"
+  },
+  {
+   "fieldname": "media_section",
+   "fieldtype": "Section Break",
+   "label": "Media"
+  },
+  {
+   "fieldname": "media_type_product",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Media Product Type",
+   "options": "FEED",
+   "read_only": 1
+  },
+  {
+   "fieldname": "commento_section",
+   "fieldtype": "Section Break",
+   "label": "Comment"
+  },
+  {
+   "fieldname": "comment_id",
+   "fieldtype": "Data",
+   "label": "Comment ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_zcgy",
+   "fieldtype": "Section Break",
+   "label": "To"
+  },
+  {
+   "fieldname": "instagram_instance",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Instagram Instance",
+   "options": "Instagram Instance",
+   "read_only": 1
+  },
+  {
+   "fieldname": "username",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Username",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_izcg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "text",
+   "fieldtype": "Text",
+   "in_list_view": 1,
+   "label": "Text",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-10-09 12:09:49.561824",
+ "modified_by": "Administrator",
+ "module": "Instagram",
+ "name": "Instagram Comment",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -10,10 +10,12 @@
  "field_order": [
   "user",
   "enabled",
+  "column_break_oolg",
+  "customer_id",
   "profile_info_section",
   "profile_picture",
   "username",
-  "app_scope_id",
+  "user_id",
   "column_break_wuar",
   "followers_count",
   "media_count",
@@ -24,7 +26,8 @@
   "refresh_token",
   "column_break_77b8e",
   "expiry_date",
-  "live"
+  "live",
+  "auto_refresh"
  ],
  "fields": [
   {
@@ -107,11 +110,6 @@
    "label": "Username"
   },
   {
-   "fieldname": "app_scope_id",
-   "fieldtype": "Data",
-   "label": "App Scope ID"
-  },
-  {
    "fieldname": "column_break_wuar",
    "fieldtype": "Column Break"
   },
@@ -124,12 +122,39 @@
    "fieldname": "media_count",
    "fieldtype": "Int",
    "label": "Media Count"
+  },
+  {
+   "fieldname": "user_id",
+   "fieldtype": "Data",
+   "label": "User ID"
+  },
+  {
+   "default": "0",
+   "fieldname": "auto_refresh",
+   "fieldtype": "Check",
+   "label": "Auto Refresh"
+  },
+  {
+   "fieldname": "column_break_oolg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer_id",
+   "fieldtype": "Link",
+   "label": "Customer ID",
+   "options": "Connectly Customer",
+   "reqd": 1
   }
  ],
  "image_field": "profile_picture",
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2025-10-01 17:08:02.154574",
+ "links": [
+  {
+   "link_doctype": "AI Agent",
+   "link_fieldname": "instagram_instance"
+  }
+ ],
+ "modified": "2025-10-12 09:41:33.143566",
  "modified_by": "Administrator",
  "module": "Instagram",
  "name": "Instagram Instance",
@@ -153,5 +178,5 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "user"
+ "title_field": "username"
 }

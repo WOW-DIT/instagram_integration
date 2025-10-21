@@ -2,9 +2,13 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Instagram Instance', {
-	// refresh: function(frm) {
-
-	// }
+	refresh: function(frm) {
+        if(frm.doc.live && frm.doc.expiry_date > frappe.datetime.now_datetime()) {
+            frm.add_custom_button("Sync Profile", () => {
+                get_profile(frm, true);
+            }).addClass("btn-primary");
+        }
+	},
 	request_live_token: function(frm) {
 		request_live_token(frm)
 	},
@@ -39,6 +43,27 @@ function refresh_token(frm) {
         callback: function(r) {
             if (!r.exc) {
                 console.log("New datetime:", r.message);
+            }
+        }
+    });
+}
+
+function get_profile(frm, sync_profile=false) {
+	frappe.call({
+        method: "instagram_integration.instagram.doctype.instagram_instance.instagram_instance.get_instagram_info",
+        args: {
+            instance_id: frm.doc.name,
+            sync_profile: sync_profile, 
+        },
+        callback: function(r) {
+            if (r.message.success) {
+                console.log("New datetime:", r.message);
+
+                const info = r.message.info;
+                
+                if(sync_profile) {
+                    location.reload();
+                }
             }
         }
     });
