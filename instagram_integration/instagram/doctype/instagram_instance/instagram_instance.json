@@ -12,6 +12,7 @@
   "enabled",
   "column_break_oolg",
   "customer_id",
+  "is_subscribed",
   "profile_info_section",
   "profile_picture",
   "username",
@@ -107,7 +108,8 @@
   {
    "fieldname": "username",
    "fieldtype": "Data",
-   "label": "Username"
+   "label": "Username",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_wuar",
@@ -116,17 +118,20 @@
   {
    "fieldname": "followers_count",
    "fieldtype": "Int",
-   "label": "Followers Count"
+   "label": "Followers Count",
+   "read_only": 1
   },
   {
    "fieldname": "media_count",
    "fieldtype": "Int",
-   "label": "Media Count"
+   "label": "Media Count",
+   "read_only": 1
   },
   {
    "fieldname": "user_id",
    "fieldtype": "Data",
-   "label": "User ID"
+   "label": "User ID",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -144,6 +149,13 @@
    "label": "Customer ID",
    "options": "Connectly Customer",
    "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_subscribed",
+   "fieldtype": "Check",
+   "label": "Subscribed",
+   "read_only": 1
   }
  ],
  "image_field": "profile_picture",
@@ -154,7 +166,7 @@
    "link_fieldname": "instagram_instance"
   }
  ],
- "modified": "2025-10-12 09:41:33.143566",
+ "modified": "2025-11-04 13:03:11.075006",
  "modified_by": "Administrator",
  "module": "Instagram",
  "name": "Instagram Instance",

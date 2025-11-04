@@ -214,6 +214,37 @@ def create_permission(user, doctype, value):
 		user_perm.for_value = value
 		user_perm.insert(ignore_permissions=True)
 
+
+@frappe.whitelist(methods=["POST"])
+def subscribe_ig_account(instance_id):
+	try:
+		ig_settings = frappe.get_doc("Instagram Settings", "Instagram Settings")
+		api_host = ig_settings.api_host
+		api_version = ig_settings.api_version
+
+		instance = frappe.get_doc("Instagram Instance", instance_id)
+		token = instance.get_password("token")
+
+		fields = "comments,messages,mentions,messaging_seen,story_insights"
+		url = f"https://{api_host}/{api_version}/me/subscribed_apps?subscribed_fields={fields}&access_token={token}"
+
+		response = requests.post(url)
+
+		success = response.status_code == 200
+		if success:
+			instance.is_subscribed = 1
+			instance.save(ignore_permissions=True)
+
+			data = response.json()
+
+			return {"success": data["success"]}
+
+		return {"success": False, "error": response.text}
+
+	except Exception as e:
+		return {"success": False, "error": str(e)}
+	
+
 @frappe.whitelist(methods=["POST"])
 def delete_user_data():
 	pass

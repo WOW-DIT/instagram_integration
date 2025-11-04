@@ -1,7 +1,8 @@
 import frappe
 from werkzeug.wrappers import Response
 from datetime import datetime
-from ai_intergration.ai_intergration.api import ai_chat, ai_comment, speech_to_text
+# from ai_intergration.ai_intergration.api import ai_chat, ai_comment, speech_to_text
+from ai_intergration.ai_intergration.api_v2 import ai_chat_v2, ai_comment, speech_to_text
 import requests
 import json
 from io import BytesIO
@@ -72,8 +73,10 @@ def instagram_webhook():
             
             token = instance.get_password("token")
 
-
+            # return
             context = get_ai_context(instance.name)
+            if not context:
+                raise Exception("service is currently down. we will be back soon.")
 
             # client_subscription = get_sub(instance.business_account)
             # if client_subscription is None:
@@ -186,7 +189,7 @@ def instagram_webhook():
 
                     model = get_model(context)
 
-                    ai_response = ai_chat(
+                    ai_response = ai_chat_v2(
                         model=model,
                         chat_id=chat.name,
                         message_type="text",
@@ -377,7 +380,7 @@ def get_model(ai_context):
 
 def has_enough_balance(sub_id):
     balance = frappe.db.get_value(
-        "WhatsApp Subscription",
+        "Connectly Subscription",
         sub_id,
         "balance"
     )
@@ -386,17 +389,19 @@ def has_enough_balance(sub_id):
     return True
 
 
-def spend_balance(sub_id):
+def spend_balance(sub_id, number_of_points=1):
     try:
+        last_balance = frappe.db.get_value(
+            "Connectly Subscription",
+            sub_id,
+            "balance"
+        )
+
         frappe.db.set_value(
-            "Instagram Subscription",
+            "Connectly Subscription",
             sub_id,
             "balance",
-            (frappe.db.get_value(
-                "Instagram Subscription",
-                sub_id,
-                "balance"
-            ) - 1),
+            (last_balance - number_of_points),
             update_modified=False,
         )
         return True
@@ -404,19 +409,27 @@ def spend_balance(sub_id):
         return False
     
 
-def get_sub(business_account):
-    try:
-        # today = datetime.now().date()
-        # today_str = today.strftime("%Y-%m-%d")
+def calculate_deducted_balance(wa_settings, converted_audio_to_text, converted_text_to_audio):
+    number_of_points = 1
 
+    if converted_audio_to_text and wa_settings.charge_on_stt:
+        number_of_points += wa_settings.stt_balance_points
+
+    if converted_text_to_audio and wa_settings.charge_on_tts:
+        number_of_points += wa_settings.tts_balance_points
+
+    return number_of_points
+
+
+def get_sub(customer_id):
+    try:
         subs = frappe.get_all(
-            "Instagram Subscription",
-            filters={"business_account": business_account, "enabled": 1},
-            fields=["name"],
+            "Connectly Subscription",
+            filters={"name": customer_id, "enabled": 1},
             limit=1,
         )
         if subs:
-            sub = frappe.get_doc("Instagram Subscription", subs[0].name)
+            sub = frappe.get_doc("Connectly Subscription", subs[0].name)
             return sub
         
         return None

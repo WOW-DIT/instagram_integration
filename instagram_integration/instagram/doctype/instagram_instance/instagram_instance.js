@@ -8,6 +8,14 @@ frappe.ui.form.on('Instagram Instance', {
                 get_profile(frm, true);
             }).addClass("btn-primary");
         }
+
+        if(frm.doc.live && frm.doc.expiry_date > frappe.datetime.now_datetime()
+            && frm.doc.user_id && frm.doc.is_subscribed == 0
+        ) {
+            frm.add_custom_button("Subscribe", () => {
+                subscribe(frm);
+            }).addClass("btn-primary");
+        }
 	},
 	request_live_token: function(frm) {
 		request_live_token(frm)
@@ -55,7 +63,7 @@ function get_profile(frm, sync_profile=false) {
             instance_id: frm.doc.name,
             sync_profile: sync_profile, 
         },
-        callback: function(r) {
+        callback: function(r) {            
             if (r.message.success) {
                 console.log("New datetime:", r.message);
 
@@ -64,6 +72,21 @@ function get_profile(frm, sync_profile=false) {
                 if(sync_profile) {
                     location.reload();
                 }
+            }
+        }
+    });
+}
+
+function subscribe(frm) {
+	frappe.call({
+        method: "instagram_integration.instagram.doctype.instagram_instance.instagram_instance.subscribe_ig_account",
+        args: {
+            instance_id: frm.doc.name,
+        },
+        callback: function(r) { 
+            console.log(r.message)           
+            if (r.message.success) {
+                location.reload();
             }
         }
     });

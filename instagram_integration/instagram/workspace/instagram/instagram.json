@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Instagram",
  "links": [],
- "modified": "2025-10-20 09:28:01.464338",
+ "modified": "2025-10-22 09:48:24.554736",
  "modified_by": "Administrator",
  "module": "Instagram",
  "name": "Instagram",
@@ -39,7 +39,7 @@
   }
  ],
  "roles": [],
- "sequence_id": 36.0,
+ "sequence_id": 37.0,
  "shortcuts": [
   {
    "color": "Grey",
